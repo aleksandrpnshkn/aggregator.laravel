@@ -38,6 +38,11 @@ class DrivingSchool extends Model
         return $this->belongsTo(User::class, 'author_id');
     }
 
+    public function address() : BelongsTo
+    {
+        return $this->belongsTo(Address::class);
+    }
+
     public function getPostStatusLabel() : string
     {
         if (!in_array($this->post_status, array_keys(self::getPostStatuses()), true)) {

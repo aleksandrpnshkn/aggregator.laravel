@@ -2,6 +2,7 @@
 
 /** @var Factory $factory */
 
+use App\Address;
 use App\DrivingSchool;
 use App\User;
 use Carbon\Carbon;
@@ -22,5 +23,6 @@ $factory->define(DrivingSchool::class, function (Faker $faker) {
         'open_date' => Carbon::yesterday(),
         'close_date' => null,
         'author_id' => \factory(User::class)->create()->id,
+        'address_id' => \factory(Address::class)->create()->id,
     ];
 });

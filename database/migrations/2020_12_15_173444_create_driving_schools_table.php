@@ -32,6 +32,13 @@ class CreateDrivingSchoolsTable extends Migration
                 ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+
+            $table->unsignedBigInteger('address_id');
+            $table->foreign('address_id')
+                ->references('id')
+                ->on('addresses')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
