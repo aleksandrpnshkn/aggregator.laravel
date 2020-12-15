@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -25,6 +26,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        // https://spatie.be/docs/laravel-permission/v3/basic-usage/super-admin
+        Gate::before(function (User $user, $ability) {
+            return $user->hasRole('admin') ? true : null;
+        });
     }
 }
