@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class DrivingSchool extends Model
 {
@@ -41,6 +42,11 @@ class DrivingSchool extends Model
     public function address() : BelongsTo
     {
         return $this->belongsTo(Address::class);
+    }
+
+    public function learning_places() : HasMany
+    {
+        return $this->hasMany(LearningPlace::class);
     }
 
     public function getPostStatusLabel() : string
