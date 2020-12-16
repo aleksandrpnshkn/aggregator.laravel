@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class DrivingCategory extends Model
 {
+    protected $fillable = [
+        'name',
+        'short_description',
+        'description',
+    ];
+
     public function driving_schools() : BelongsToMany
     {
         return $this->belongsToMany(DrivingSchool::class, 'driving_school_driving_category');
