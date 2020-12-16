@@ -4,7 +4,9 @@ import Buefy from "buefy";
 
 import DrivingSchoolsFilter from './components/DrivingSchoolsFilter';
 
-Vue.use(Buefy);
+Vue.use(Buefy, {
+    defaultIconPack: 'fas',
+});
 
 new Vue({
     el: '#root',
