@@ -55,6 +55,11 @@ class DrivingSchool extends Model
         return $this->belongsToMany(DrivingCategory::class, 'driving_school_driving_category');
     }
 
+    public function conclusions() : HasMany
+    {
+        return $this->hasMany(Conclusion::class);
+    }
+
     public function getPostStatusLabel() : string
     {
         if (!in_array($this->post_status, array_keys(self::getPostStatuses()), true)) {

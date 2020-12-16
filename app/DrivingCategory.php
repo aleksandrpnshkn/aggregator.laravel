@@ -11,4 +11,9 @@ class DrivingCategory extends Model
     {
         return $this->belongsToMany(DrivingSchool::class, 'driving_school_driving_category');
     }
+
+    public function conclusions() : BelongsToMany
+    {
+        return $this->belongsToMany(Conclusion::class, 'conclusion_driving_category');
+    }
 }
