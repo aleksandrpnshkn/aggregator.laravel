@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\DrivingCategory;
+use Cache;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class DrivingCategoryController extends Controller
@@ -81,5 +83,14 @@ class DrivingCategoryController extends Controller
     public function destroy(DrivingCategory $drivingCategory)
     {
         //
+    }
+
+    public function getAll() : JsonResponse
+    {
+        $drivingCategories = Cache::remember('driving_categories', now()->addHour(), function () {
+            return DrivingCategory::orderBy('id')->get(['id', 'name'])->toArray();
+        });
+
+        return response()->json($drivingCategories);
     }
 }

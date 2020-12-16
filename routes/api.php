@@ -16,3 +16,12 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/driving-schools', 'DrivingSchoolController@filter');
+
+Route::get('/driving-categories', 'DrivingCategoryController@getAll');
+
+Route::get('/regions', 'AddressController@getRegions');
+Route::get('/regions/{region}/cities', 'AddressController@getCities');
+Route::get('/regions/{region}/cities/{city}/districts', 'AddressController@getDistricts')
+    ->where('city', '.*');
