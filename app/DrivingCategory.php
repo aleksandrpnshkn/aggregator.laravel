@@ -16,4 +16,9 @@ class DrivingCategory extends Model
     {
         return $this->belongsToMany(Conclusion::class, 'conclusion_driving_category');
     }
+
+    public function programs() : BelongsToMany
+    {
+        return $this->belongsToMany(Program::class, 'program_driving_category');
+    }
 }

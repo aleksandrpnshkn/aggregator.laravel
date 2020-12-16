@@ -60,6 +60,11 @@ class DrivingSchool extends Model
         return $this->hasMany(Conclusion::class);
     }
 
+    public function programs() : HasMany
+    {
+        return $this->hasMany(Program::class);
+    }
+
     public function getPostStatusLabel() : string
     {
         if (!in_array($this->post_status, array_keys(self::getPostStatuses()), true)) {

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
 
 class LearningPlace extends Model
@@ -27,6 +28,11 @@ class LearningPlace extends Model
     public function address() : BelongsTo
     {
         return $this->belongsTo(Address::class);
+    }
+
+    public function programs() : HasMany
+    {
+        return $this->hasMany(Program::class);
     }
 
     public function getTypeLabel() : string
