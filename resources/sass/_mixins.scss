@@ -1,0 +1,438 @@
+@import 'variables';
+
+// Rem output with px fallback
+@mixin font-size($sizeValue: 1) {
+    font-size: ($sizeValue * 16) * 1px;
+    font-size: $sizeValue * 1rem;
+}
+
+// Clearfix
+@mixin clearfix {
+    content: "";
+    display: table;
+    table-layout: fixed;
+}
+
+// Clear after (not all clearfix need this also)
+@mixin clearfix-after {
+    clear: both;
+}
+
+@mixin reset-button {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+
+    font: inherit;
+    line-height: 1;
+    letter-spacing: inherit;
+    text-align: center;
+    color: inherit;
+
+    background: none;
+    border: none;
+
+    @include hover-focus-active {
+        border: none;
+    }
+}
+
+@mixin reset-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+@mixin reset-link {
+    color: inherit;
+    text-decoration: none;
+    border: 0;
+
+    &:link,
+    &:visited,
+    &:hover,
+    &:focus,
+    &:active {
+        color: inherit;
+    }
+}
+
+@mixin set-active-color($active_clr) {
+    @include hover-focus-active {
+        color: $active_clr;
+        text-decoration: transparent;
+    }
+}
+
+// Set colors for link
+@mixin set-link-color($clr, $active_clr: false) {
+    color: $clr;
+    text-decoration-color: $clr;
+
+    transition-property: color, text-decoration-color;
+    transition-duration: 0.1s;
+
+    &:link,
+    &:visited {
+        color: $clr;
+        text-decoration-color: $clr;
+    }
+
+    @if $active_clr {
+        @include set-active-color($active_clr);
+    } @else {
+        @include set-active-color($clr);
+    }
+}
+
+// Only display content to screen readers
+//
+// See: https://a11yproject.com/posts/how-to-hide-content/
+// See: https://hugogiraudel.com/2016/10/13/css-hide-and-seek/
+@mixin screen-reader-text {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important; // Fix for https://github.com/twbs/bootstrap/issues/25686
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+// Use to only display content when it's focused.
+//
+// Useful for "Skip to main content" links; see https://www.w3.org/TR/2013/NOTE-WCAG20-TECHS-20130905/G1
+@mixin screen-reader-text-focusable {
+    &:not(:focus) {
+        @include screen-reader-text();
+    }
+}
+
+@mixin overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+@mixin pseudo-underlay($pos: 'before') {
+    position: relative;
+    z-index: 0;
+
+    @if $pos == 'after' {
+        &::after {
+            content: '';
+            z-index: -1;
+
+            @include overlay;
+            @content;
+        }
+    } @else {
+        &::before {
+            content: '';
+            z-index: -1;
+
+            @include overlay;
+            @content;
+        }
+    }
+}
+
+// Remove bottom bottom of last item
+@mixin last-mb0() {
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+@mixin last-mr0() {
+    &:last-child {
+        margin-right: 0;
+    }
+}
+
+/// Creates a CSS triangle, which can be used for dropdown arrows, dropdown pips, and more. Use this mixin inside a `&::before` or `&::after` selector, to attach the triangle to an existing element.
+///
+/// @param {Number} $triangle-size - Width of the triangle.
+/// @param {Color} $triangle-color - Color of the triangle.
+/// @param {Keyword} $triangle-direction - Direction the triangle points. Can be `up`, `right`, `down`, or `left`.
+@mixin css-triangle(
+    $triangle-size,
+    $triangle-color,
+    $triangle-direction
+) {
+    display: block;
+    width: 0;
+    height: 0;
+
+    border: inset $triangle-size;
+
+    content: '';
+
+    @if ($triangle-direction == down) {
+        border-bottom-width: 0;
+        border-top-style: solid;
+        border-color: $triangle-color transparent transparent;
+    }
+    @if ($triangle-direction == up) {
+        border-top-width: 0;
+        border-bottom-style: solid;
+        border-color: transparent transparent $triangle-color;
+    }
+    @if ($triangle-direction == right) {
+        border-right-width: 0;
+        border-left-style: solid;
+        border-color: transparent transparent transparent $triangle-color;
+    }
+    @if ($triangle-direction == left) {
+        border-left-width: 0;
+        border-right-style: solid;
+        border-color: transparent $triangle-color transparent transparent;
+    }
+}
+
+/// Creates a menu icon with a set width, height, number of bars, and colors. The mixin uses the height of the icon and the weight of the bars to determine spacing. <div class="docs-example-burger"></div>
+///
+/// @param {Color} $color [$black] - Color to use for the icon.
+/// @param {Color} $color-hover [$dark-gray] - Color to use when the icon is hovered over.
+/// @param {Number} $width [20px] - Width of the icon.
+/// @param {Number} $height [16px] - Height of the icon.
+/// @param {Number} $weight [2px] - Height of individual bars in the icon.
+/// @param {Number} $bars [3] - Number of bars in the icon.
+@mixin hamburger(
+    $color: black,
+    $color-hover: darkgray,
+    $width: 20px,
+    $height: 16px,
+    $weight: 2px,
+    $bars: 3
+) {
+    // box-shadow CSS output
+    $shadow: ();
+    $hover-shadow: ();
+
+    // Spacing between bars is calculated based on the total height of the icon and the weight of each bar
+    $spacing: ($height - ($weight * $bars)) / ($bars - 1);
+
+    @if unit($spacing) == 'px' {
+        $spacing: floor($spacing);
+    }
+
+    @for $i from 2 through $bars {
+        $offset: ($weight + $spacing) * ($i - 1);
+        $shadow: append($shadow, 0 $offset 0 $color, comma);
+    }
+
+    // Icon container
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    width: $width;
+    height: $height;
+    cursor: pointer;
+
+    // Icon bars
+    &::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        display: block;
+        width: 100%;
+        height: $weight;
+
+        background: $color;
+        box-shadow: $shadow;
+
+        content: '';
+    }
+
+    // Hover state
+    @if $color-hover {
+        // Generate CSS
+        @for $i from 2 through $bars {
+            $offset: ($weight + $spacing) * ($i - 1);
+            $hover-shadow: append($hover-shadow, 0 $offset 0 $color-hover, comma);
+        }
+
+        &:hover::after {
+            background: $color-hover;
+            box-shadow: $hover-shadow;
+        }
+    }
+}
+
+/// Vertically centers the element inside of its first non-static parent,
+/// @link http://www.sitepoint.com/centering-with-sass/ Centering With Sass
+@mixin vertical-center {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/// Horizontally centers the element inside of its first non-static parent,
+/// @link http://www.sitepoint.com/centering-with-sass/ Centering With Sass
+@mixin horizontal-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/// Absolutely centers the element inside of its first non-static parent,
+/// @link http://www.sitepoint.com/centering-with-sass/ Centering With Sass
+@mixin absolute-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@mixin reset-buttons-outlines {
+    button,
+    input[type="button"],
+    input[type="reset"],
+    input[type="submit"] {
+        @include hover-focus-active {
+            outline: none;
+        }
+    }
+}
+
+@mixin hover() {
+    &:hover { @content; }
+}
+
+@mixin hover-focus() {
+    &:hover,
+    &:focus {
+        @content;
+    }
+}
+
+@mixin plain-hover-focus() {
+    &,
+    &:hover,
+    &:focus {
+        @content;
+    }
+}
+
+@mixin hover-focus-active() {
+    &:hover,
+    &:focus,
+    &:active {
+        @content;
+    }
+}
+
+@mixin flip-horizontally {
+    transform: scaleX(-1);
+    filter: fliph; /*IE*/
+}
+
+@mixin flip-vertically {
+    transform: scaleY(-1);
+}
+
+@mixin prevent-margin-collapse {
+    &::before,
+    &::after {
+        content: ' ';
+        display: table;
+    }
+}
+
+// Медиа миксины из бутстрапа
+
+// Media of at least the minimum breakpoint width. No query for the smallest breakpoint.
+// Makes the @content apply to the given breakpoint and wider.
+@mixin media-breakpoint-up($name, $breakpoints: $grid-breakpoints) {
+    $min: breakpoint-min($name, $breakpoints);
+    @if $min {
+        @media (min-width: $min) {
+            @content;
+        }
+    } @else {
+        @content;
+    }
+}
+
+// Media of at most the maximum breakpoint width. No query for the largest breakpoint.
+// Makes the @content apply to the given breakpoint and narrower.
+@mixin media-breakpoint-down($name, $breakpoints: $grid-breakpoints) {
+    $max: breakpoint-max($name, $breakpoints);
+    @if $max {
+        @media (max-width: $max) {
+            @content;
+        }
+    } @else {
+        @content;
+    }
+}
+
+// Media that spans multiple breakpoint widths.
+// Makes the @content apply between the min and max breakpoints
+@mixin media-breakpoint-between($lower, $upper, $breakpoints: $grid-breakpoints) {
+    $min: breakpoint-min($lower, $breakpoints);
+    $max: breakpoint-max($upper, $breakpoints);
+
+    @if $min != null and $max != null {
+        @media (min-width: $min) and (max-width: $max) {
+            @content;
+        }
+    } @else if $max == null {
+        @include media-breakpoint-up($lower, $breakpoints) {
+            @content;
+        }
+    } @else if $min == null {
+        @include media-breakpoint-down($upper, $breakpoints) {
+            @content;
+        }
+    }
+}
+
+// Media between the breakpoint's minimum and maximum widths.
+// No minimum for the smallest breakpoint, and no maximum for the largest one.
+// Makes the @content apply only to the given breakpoint, not viewports any wider or narrower.
+@mixin media-breakpoint-only($name, $breakpoints: $grid-breakpoints) {
+    $min: breakpoint-min($name, $breakpoints);
+    $max: breakpoint-max($name, $breakpoints);
+
+    @if $min != null and $max != null {
+        @media (min-width: $min) and (max-width: $max) {
+            @content;
+        }
+    } @else if $max == null {
+        @include media-breakpoint-up($name, $breakpoints) {
+            @content;
+        }
+    } @else if $min == null {
+        @include media-breakpoint-down($name, $breakpoints) {
+            @content;
+        }
+    }
+}
+
+// Для бутстраповских медиа миксинов
+@function breakpoint-next($name, $breakpoints: $grid-breakpoints, $breakpoint-names: map-keys($breakpoints)) {
+    $n: index($breakpoint-names, $name);
+    @if not $n {
+        @error "breakpoint `#{$name}` not found in `#{$breakpoints}`";
+    }
+    @return if($n < length($breakpoint-names), nth($breakpoint-names, $n + 1), null);
+}
+@function breakpoint-min($name, $breakpoints: $grid-breakpoints) {
+    $min: map-get($breakpoints, $name);
+    @return if($min != 0, $min, null);
+}
+@function breakpoint-max($name, $breakpoints: $grid-breakpoints) {
+    $next: breakpoint-next($name, $breakpoints);
+    @return if($next, breakpoint-min($next, $breakpoints) - .02, null);
+}
+@function breakpoint-infix($name, $breakpoints: $grid-breakpoints) {
+    @return if(breakpoint-min($name, $breakpoints) == null, "", "-#{$name}");
+}

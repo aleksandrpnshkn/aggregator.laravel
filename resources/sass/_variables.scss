@@ -1,19 +1,58 @@
-// Body
-$body-bg: #f8fafc;
+$black:        hsl(0, 0%, 4%);
+$black-bis:    hsl(0, 0%, 7%);
+$black-ter:    hsl(0, 0%, 14%);
 
-// Typography
-$font-family-sans-serif: 'Nunito', sans-serif;
-$font-size-base: 0.9rem;
-$line-height-base: 1.6;
+$grey-darker:  hsl(0, 0%, 21%);
+$grey-dark:    hsl(0, 0%, 29%);
+$grey:         hsl(0, 0%, 48%);
+$grey-light:   hsl(0, 0%, 71%);
+$grey-lighter: hsl(0, 0%, 86%);
+$grey-lightest: hsl(0, 0%, 93%);
 
-// Colors
-$blue: #3490dc;
-$indigo: #6574cd;
-$purple: #9561e2;
-$pink: #f66d9b;
-$red: #e3342f;
-$orange: #f6993f;
-$yellow: #ffed4a;
-$green: #38c172;
-$teal: #4dc0b5;
-$cyan: #6cb2eb;
+$white-ter:    hsl(0, 0%, 96%);
+$white-bis:    hsl(0, 0%, 98%);
+$white:        hsl(0, 0%, 100%);
+
+$orange:       hsl(14,  100%, 53%);
+$yellow:       hsl(48,  100%, 67%);
+$green:        hsl(141, 53%,  53%);
+$turquoise:    hsl(171, 100%, 41%);
+$cyan:         hsl(204, 71%,  53%);
+$blue:         hsl(217, 71%,  53%);
+$purple:       hsl(271, 100%, 71%);
+$red:          hsl(348, 86%, 61%);
+
+$color__white: #FDFFFD;
+$color__dark-gray: #3C3C3C;
+$color__tea-green: #C6E0C6;
+$color__mint-green: #EFF6EF;
+$color__dark-green: #1B5E20;
+$color__cambridge-blue: #A3B9AA;
+
+$color__danger: #dc3545;
+$color__text-main: #404040;
+
+$font__main: "Roboto", Arial, Helvetica, sans-serif;
+$font__titles: "Times New Roman", "Bitstream Charter", Times, serif;
+$font__line-height: 1.5;
+
+$grid-breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px
+) !default;
+
+$site-padding--xs: 20px;
+$site-padding--md: 20px;
+$site-padding--lg: 20px;
+
+$site-max-width: 1200px;
+
+//$navbar-height--xs: ;
+//$navbar-height--md: ;
+//$navbar-height--lg: ;
+
+$retina__dpi: '(min-resolution: 144dpi)';
+$retina__dppx: '(min-resolution: 1.5dppx)';
