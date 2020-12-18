@@ -36,15 +36,15 @@ class DrivingSchoolController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\DrivingSchool  $drivingSchool
-     * @return \Illuminate\Http\Response
-     */
-    public function show(DrivingSchool $drivingSchool)
+    public function show(string $slug)
     {
-        //
+        $drivingSchool = DrivingSchool::where('slug', $slug)
+            ->with(['learning_places', 'address', 'driving_categories', 'programs'])
+            ->firstOrFail();
+
+        return view('driving-schools.show', [
+            'drivingSchool' => $drivingSchool,
+        ]);
     }
 
     /**

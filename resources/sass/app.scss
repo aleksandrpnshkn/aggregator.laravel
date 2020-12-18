@@ -3,8 +3,98 @@
 
 // Variables
 @import 'variables';
+@import "mixins";
 
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";
 @import "~@fortawesome/fontawesome-free/scss/solid";
 
 @import "~buefy/dist/buefy.min.css";
+
+.layout-content {
+    padding: 50px 0;
+}
+
+.driving-school__header {
+    @include media-breakpoint-up(md) {
+        display: flex;
+    }
+}
+
+.driving-school__logo {
+    overflow: hidden;
+
+    flex-shrink: 0;
+    width: 200px;
+    margin-right: 30px;
+
+    border-radius: 4px;
+
+    @include media-breakpoint-up(md) {
+        margin-right: 40px;
+    }
+
+    @include media-breakpoint-up(lg) {
+        margin-right: 50px;
+    }
+
+    > img {
+        width: 100%;
+        height: auto;
+    }
+
+    .driving-school__logo-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 200px;
+        height: 160px;
+
+        background-color: $grey-lighter;
+
+        > i {
+            font-size: 60px;
+        }
+    }
+}
+
+.driving-school__columns {
+    display: grid;
+    grid-gap: 30px;
+
+    @include media-breakpoint-up(md) {
+        grid-gap: 40px;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @include media-breakpoint-up(lg) {
+        grid-gap: 60px;
+        grid-template-columns: 2fr 1fr;
+    }
+}
+
+.driving-school__sideinfo {
+    font-size: 0.9em;
+}
+
+.driving-school__headinfo {
+    @include media-breakpoint-up(md) {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .buttons {
+        margin-top: 20px;
+
+        @include media-breakpoint-up(md) {
+            margin-top: auto;
+        }
+    }
+}
+
+.driving-school__subheader {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+}

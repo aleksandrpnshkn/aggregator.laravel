@@ -14,4 +14,6 @@
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
-Route::resource('driving-schools', 'DrivingSchoolController');
+
+Route::get('/driving-schools', 'DrivingSchoolController@index');
+Route::get('/driving-schools/{slug}', 'DrivingSchoolController@show');
