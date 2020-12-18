@@ -60,7 +60,10 @@
                 Не найдено
             </p>
 
-            <div v-for="drivingSchool in drivingSchools">{{ drivingSchool.name || drivingSchool.legal_name }}</div>
+            <driving-school-preview v-for="drivingSchool in drivingSchools"
+                                    :key="drivingSchool.id"
+                                    :drivingSchool="drivingSchool"
+            ></driving-school-preview>
 
             <hr>
             <b-pagination
@@ -85,11 +88,12 @@
 
 <script>
 import DrivingCategoriesDropdown from "./DrivingCategoriesDropdown";
+import DrivingSchoolPreview from './DrivingSchoolPreview';
 
 export default {
     name: 'DrivingSchoolsFilter',
 
-    components: {DrivingCategoriesDropdown},
+    components: {DrivingCategoriesDropdown, DrivingSchoolPreview},
 
     data() {
         return {
