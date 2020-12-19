@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -32,6 +33,27 @@ class Program extends Model
     public function driving_categories() : BelongsToMany
     {
         return $this->belongsToMany(DrivingCategory::class, 'program_driving_category');
+    }
+
+    public static function scopeUpcoming(Builder $query) : Builder
+    {
+        return $query->where('starts_at', '>', now());
+    }
+
+    public static function scopeCurrent(Builder $query) : Builder
+    {
+        return $query->where('starts_at', '<', now())
+            ->where('ends_at', '>', now());
+    }
+
+    public static function scopeEnded(Builder $query) : Builder
+    {
+        return $query->where('ends_at', '<', now());
+    }
+
+    public static function scopeNotEnded(Builder $query) : Builder
+    {
+        return $query->where('ends_at', '>', now());
     }
 
     public static function getPriceTypes() : array
