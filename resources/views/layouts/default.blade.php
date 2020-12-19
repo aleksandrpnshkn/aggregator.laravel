@@ -4,9 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
@@ -20,6 +17,13 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
+    <script>
+        window.serverData = {
+            csrfToken: '{{ csrf_token() }}',
+            dadataToken: '06bcc8fb27eb96eac7c1f4bcca1c76c3afb408fe',
+        };
+    </script>
+
     <div id="root">
         <div class="layout-content">
             <div class="container">
