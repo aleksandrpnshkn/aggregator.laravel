@@ -11,10 +11,10 @@ use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(DrivingSchool::class, function (Faker $faker) {
     return [
-        'name' => $faker->sentence(2),
+        'name' => $faker->boolean ? $faker->company : null,
         'legal_name' => $faker->company,
         'slug' => $faker->slug,
-        'inn' => $faker->numberBetween(1000000000, 9999999999),
+        'inn' => $faker->inn,
         'type' => array_rand(DrivingSchool::getTypes()),
         'post_status' => array_rand(DrivingSchool::getPostStatuses()),
         'school_status' => array_rand(DrivingSchool::getSchoolStatuses()),

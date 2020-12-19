@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factory;
 $factory->define(Address::class, function (Faker $faker) {
     return [
         'value' => $faker->address,
-        'region_with_type' => $faker->state,
+        'region_with_type' => $faker->region,
         'city_with_type' => $faker->city,
         'street_with_type' => $faker->streetName,
         'house' => $faker->randomNumber(2),
