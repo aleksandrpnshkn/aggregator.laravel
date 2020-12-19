@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Address;
+use App\DrivingCategory;
 use App\DrivingSchool;
+use App\Helpers\Helper;
+use App\Rules\Inn;
+use Auth;
+use Cache;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Str;
+use Symfony\Component\HttpFoundation\Response;
 
 class DrivingSchoolController extends Controller
 {
@@ -15,25 +24,52 @@ class DrivingSchoolController extends Controller
         return view('driving-schools.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        return view('driving-schools.create', [
+            'drivingCategories' => json_encode(Cache::remember('driving_categories', now()->addHour(), function () {
+                return DrivingCategory::get(['id', 'name'])->toArray();
+            }), JSON_UNESCAPED_UNICODE),
+            'schoolTypes' => json_encode(DrivingSchool::getTypes(), JSON_UNESCAPED_UNICODE),
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(Request $request) : Response
     {
-        //
+        $validated = $request->validate([
+            'name' => 'nullable|string|min:3|max:100',
+            'legal_name' => 'required|string|min:3|max:255',
+            // Владельцем может быть не только ЮР.лицо, но и ИП
+            'inn' => ['nullable', new Inn(), 'unique:driving_schools,inn'],
+            'type' => ['nullable', Rule::in(array_keys(DrivingSchool::getTypes()))],
+            'address' => 'required|array',
+            'address.value' => 'required|string',
+            'driving_categories' => 'nullable|array',
+            'driving_categories.*' => 'integer|exists:driving_categories,id',
+        ]);
+
+        $drivingSchool = DrivingSchool::make();
+        $drivingSchool->name = $validated['name'];
+        $drivingSchool->legal_name = $validated['legal_name'];
+        $drivingSchool->inn = $validated['inn'];
+        $drivingSchool->type = $validated['type'];
+
+        // Если такой слаг уже есть - прибавить число
+        $name = $drivingSchool->name ? $drivingSchool->name : $drivingSchool->legal_name;
+        $slug = Str::limit(Str::slug($name), 100, '');
+        while (DrivingSchool::where('slug', $slug)->exists()) {
+            $slug = Helper::incrementSlug($slug, 100);
+        }
+        $drivingSchool->slug = $slug;
+
+        $drivingSchool->post_status = DrivingSchool::POST_STATUS_PUBLISH;
+        $drivingSchool->address()->associate(Address::getExistedOrCreate($validated['address']));
+        $drivingSchool->author()->associate(Auth::user());
+        $drivingSchool->saveOrFail();
+
+        $drivingSchool->driving_categories()->sync($validated['driving_categories']);
+
+        return response($drivingSchool->slug, Response::HTTP_CREATED);
     }
 
     public function show(string $slug)
