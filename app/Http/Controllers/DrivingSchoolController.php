@@ -27,9 +27,7 @@ class DrivingSchoolController extends Controller
     public function create()
     {
         return view('driving-schools.create', [
-            'drivingCategories' => json_encode(Cache::remember('driving_categories', now()->addHour(), function () {
-                return DrivingCategory::get(['id', 'name'])->toArray();
-            }), JSON_UNESCAPED_UNICODE),
+            'drivingCategories' => json_encode(self::getAllDrivingCategories(), JSON_UNESCAPED_UNICODE),
             'schoolTypes' => json_encode(DrivingSchool::getTypes(), JSON_UNESCAPED_UNICODE),
         ]);
     }
@@ -83,38 +81,54 @@ class DrivingSchoolController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\DrivingSchool  $drivingSchool
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(DrivingSchool $drivingSchool)
+    public function edit(string $slug)
     {
-        //
+        $drivingSchool = DrivingSchool::where('slug', $slug)
+            ->with(['address', 'driving_categories'])
+            ->firstOrFail();
+
+        return view('driving-schools.edit', [
+            'drivingSchool' => json_encode($drivingSchool, JSON_UNESCAPED_UNICODE),
+            'drivingCategories' => json_encode(self::getAllDrivingCategories(), JSON_UNESCAPED_UNICODE),
+            'schoolTypes' => json_encode(DrivingSchool::getTypes(), JSON_UNESCAPED_UNICODE),
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\DrivingSchool  $drivingSchool
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, DrivingSchool $drivingSchool)
+    public function update(Request $request, string $slug)
     {
-        //
+        $drivingSchool = DrivingSchool::where('slug', $slug)->firstOrFail();
+
+        $this->authorize('edit driving school', $drivingSchool);
+
+        $validated = $request->validate([
+            'name' => 'nullable|string|min:3|max:100',
+            'legal_name' => 'required|string|min:3|max:255',
+            'inn' => ['nullable', new Inn(), Rule::unique('driving_schools')->ignore($drivingSchool)],
+            'type' => ['nullable', Rule::in(array_keys(DrivingSchool::getTypes()))],
+            'address' => 'required|array',
+            'address.value' => 'required|string',
+            'driving_categories' => 'nullable|array',
+            'driving_categories.*' => 'integer|exists:driving_categories,id',
+        ]);
+
+        $drivingSchool->name = $validated['name'];
+        $drivingSchool->legal_name = $validated['legal_name'];
+        $drivingSchool->inn = $validated['inn'];
+        $drivingSchool->type = $validated['type'];
+        $drivingSchool->post_status = DrivingSchool::POST_STATUS_PUBLISH;
+        $drivingSchool->address()->associate(Address::getExistedOrCreate($validated['address']));
+        $drivingSchool->saveOrFail();
+
+        $drivingSchool->driving_categories()->sync($validated['driving_categories']);
+
+        return response($drivingSchool->slug, Response::HTTP_OK);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\DrivingSchool  $drivingSchool
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(DrivingSchool $drivingSchool)
+    public function destroy(string $slug)
     {
-        //
+        $drivingSchool = DrivingSchool::whereSlug($slug)->firstOrFail();
+        $drivingSchool->delete();
+        return response('Ok', Response::HTTP_OK);
     }
 
     public function filter(Request $request) : JsonResponse
@@ -173,5 +187,12 @@ class DrivingSchoolController extends Controller
         $drivingSchools->with(['address']);
 
         return response()->json($drivingSchools->paginate(6)->toArray());
+    }
+
+    public static function getAllDrivingCategories()
+    {
+        return Cache::remember('driving_categories', now()->addHour(), function () {
+            return DrivingCategory::get(['id', 'name'])->toArray();
+        });
     }
 }
