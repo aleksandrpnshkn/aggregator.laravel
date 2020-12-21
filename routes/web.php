@@ -24,3 +24,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/driving-schools/{slug}', 'DrivingSchoolController@destroy');
 });
 Route::get('/driving-schools/{slug}', 'DrivingSchoolController@show');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/driving-schools/{slug}/learning-places', 'LearningPlaceController@index')
+        ->name('learningPlaces');
+    Route::get('/driving-schools/{slug}/learning-places/create', 'LearningPlaceController@createOrEdit')
+        ->name('createLearningPlace');
+    Route::get('/driving-schools/{slug}/learning-places/{learningPlace}/edit', 'LearningPlaceController@createOrEdit')
+        ->name('editLearningPlace');
+    Route::post('/driving-schools/{slug}/learning-places', 'LearningPlaceController@storeOrUpdate');
+    Route::delete('/driving-schools/{slug}/learning-places/{learningPlace}', 'LearningPlaceController@destroy')
+        ->name('deleteLearningPlace');
+});

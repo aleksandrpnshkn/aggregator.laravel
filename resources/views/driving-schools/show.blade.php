@@ -74,7 +74,7 @@
                     <h3 class="subtitle is-5 is-inline-block">Учебные места</h3>
 
                     @can('edit driving school', $drivingSchool)
-                        <a href="/driving-schools/{{ $drivingSchool->slug }}/learning-places/edit"
+                        <a href="{{ route('learningPlaces', [$drivingSchool->slug]) }}"
                            class="button is-small is-primary"
                            aria-label="Редактировать учебные места"
                         >
@@ -84,16 +84,16 @@
                 </div>
 
                 @if($drivingSchool->learning_places->count())
-                <table class="table is-bordered is-narrow is-fullwidth">
-                    @foreach($drivingSchool->learning_places as $learningPlace)
-                        <tr>
-                            <td>{{ $learningPlace->getTypeLabel() }}</td>
-                            <td>{{ $learningPlace->address->value }}</td>
-                        </tr>
-                    @endforeach
-                </table>
+                    <table class="table is-bordered is-narrow is-fullwidth">
+                        @foreach($drivingSchool->learning_places as $learningPlace)
+                            <tr>
+                                <td>{{ $learningPlace->getTypeLabel() }}</td>
+                                <td>{{ $learningPlace->address->value }}</td>
+                            </tr>
+                        @endforeach
+                    </table>
                 @else
-                <p class="is-small">Информация не заполнена</p>
+                    <p class="is-small">Информация не заполнена</p>
                 @endif
             </section>
 

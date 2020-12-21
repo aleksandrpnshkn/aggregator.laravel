@@ -20,6 +20,10 @@ class LearningPlace extends Model
         'address',
     ];
 
+    protected $appends = [
+        'type_label',
+    ];
+
     public function driving_school() : BelongsTo
     {
         return $this->belongsTo(DrivingSchool::class);
@@ -33,6 +37,11 @@ class LearningPlace extends Model
     public function programs() : HasMany
     {
         return $this->hasMany(Program::class);
+    }
+
+    public function getTypeLabelAttribute() : string
+    {
+        return $this->getTypeLabel();
     }
 
     public function getTypeLabel() : string
