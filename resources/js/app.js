@@ -6,6 +6,7 @@ import DrivingSchoolsFilter from './components/DrivingSchoolsFilter';
 import CreateDrivingSchool from './components/CreateDrivingSchool';
 import EditDrivingSchool from './components/EditDrivingSchool';
 import LearningPlacesTable from './components/LearningPlacesTable';
+import EditLearningPlace from './components/EditLearningPlace';
 
 Vue.use(Buefy, {
     defaultIconPack: 'fas',
@@ -18,5 +19,6 @@ new Vue({
         CreateDrivingSchool,
         EditDrivingSchool,
         LearningPlacesTable,
+        EditLearningPlace,
     }
 });
