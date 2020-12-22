@@ -20,6 +20,10 @@ class Program extends Model
         'description',
     ];
 
+    protected $appends = [
+        'price_with_type',
+    ];
+
     public function driving_school(): BelongsTo
     {
         return $this->belongsTo(DrivingSchool::class);
@@ -33,6 +37,18 @@ class Program extends Model
     public function driving_categories() : BelongsToMany
     {
         return $this->belongsToMany(DrivingCategory::class, 'program_driving_category');
+    }
+
+    public function getPriceWithTypeAttribute() : ?string
+    {
+        return $this->price && $this->price_type
+            ? $this->price . ' ₽ ' . mb_strtolower($this->getPriceLabel())
+            : null;
+    }
+
+    public function getPriceLabel() : string
+    {
+        return self::getPriceTypes()[$this->price_type];
     }
 
     public static function scopeUpcoming(Builder $query) : Builder

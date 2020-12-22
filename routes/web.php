@@ -36,3 +36,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/driving-schools/{slug}/learning-places/{learningPlace}', 'LearningPlaceController@destroy')
         ->name('deleteLearningPlace');
 });
+Route::get('/driving-schools/{slug}/learning-places/{learningPlace}', 'LearningPlaceController@show')
+    ->name('showLearningPlace');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/driving-schools/{slug}/programs', 'ProgramController@index')->name('programs');
+    Route::get('/driving-schools/{slug}/programs/create', 'ProgramController@createOrEdit')->name('createProgram');
+    Route::get('/driving-schools/{slug}/programs/{program}/edit', 'ProgramController@createOrEdit')->name('editProgram');
+    Route::post('/driving-schools/{slug}/programs', 'ProgramController@storeOrUpdate');
+    Route::delete('/driving-schools/{slug}/programs/{program}', 'ProgramController@destroy')->name('deleteProgram');
+});
+Route::get('/driving-schools/{slug}/programs/{program}', 'ProgramController@show')->name('showProgram');

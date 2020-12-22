@@ -102,7 +102,7 @@
                     <h3 class="subtitle is-5 is-inline-block">Программы</h3>
 
                     @can('edit driving school', $drivingSchool)
-                        <a href="/driving-schools/{{ $drivingSchool->slug }}/programs/edit"
+                        <a href="{{ route('programs', $drivingSchool->slug) }}"
                            class="button is-small is-primary"
                            aria-label="Редактировать программы"
                         >
@@ -114,10 +114,10 @@
                 @if($drivingSchool->programs->count())
                     <table class="table is-bordered is-narrow is-fullwidth">
                         @foreach($drivingSchool->programs as $program)
-                        <tr>
-                            <td>{{ $program->title }}</td>
-                            <td>{{ $program->driving_categories->implode('name', ', ') }}</td>
-                        </tr>
+                            <tr>
+                                <td>{{ $program->name }}</td>
+                                <td>{{ $program->driving_categories->implode('name', ', ') }}</td>
+                            </tr>
                         @endforeach
                     </table>
                 @else
