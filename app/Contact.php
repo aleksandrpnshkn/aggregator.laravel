@@ -19,6 +19,11 @@ class Contact extends Model
         'value',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:c',
+        'updated_at' => 'datetime:c',
+    ];
+
     public function driving_schools() : MorphTo
     {
         return $this->morphTo(DrivingSchool::class, 'contactable');

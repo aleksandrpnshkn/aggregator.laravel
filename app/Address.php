@@ -21,6 +21,11 @@ class Address extends Model
         'geo_lon',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:c',
+        'updated_at' => 'datetime:c',
+    ];
+
     /**
      * В базе не нужны дубли адресов, поэтому при создании проверять существует ли адрес
      */

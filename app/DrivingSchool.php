@@ -29,11 +29,11 @@ class DrivingSchool extends Model
         'slug',
     ];
 
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'open_date',
-        'close_date',
+    protected $casts = [
+        'created_at' => 'datetime:c',
+        'updated_at' => 'datetime:c',
+        'open_date' => 'datetime:c',
+        'close_date' => 'datetime:c',
     ];
 
     public function author(): BelongsTo

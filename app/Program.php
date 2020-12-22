@@ -24,6 +24,11 @@ class Program extends Model
         'price_with_type',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:c',
+        'updated_at' => 'datetime:c',
+    ];
+
     public function driving_school(): BelongsTo
     {
         return $this->belongsTo(DrivingSchool::class);

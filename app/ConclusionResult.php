@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ConclusionResult extends Model
 {
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'starts_at',
-        'ends_at',
+    protected $casts = [
+        'created_at' => 'datetime:c',
+        'updated_at' => 'datetime:c',
+        'starts_at' => 'datetime:c',
+        'ends_at' => 'datetime:c',
     ];
 
     public function conclusion() : BelongsTo

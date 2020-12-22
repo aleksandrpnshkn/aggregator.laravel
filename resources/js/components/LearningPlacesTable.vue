@@ -9,8 +9,8 @@
         <b-table v-if="learningPlaces.length" :data="learningPlaces" bordered detailed detail-key="id">
             <b-table-column label="Тип" v-slot="props">{{ props.row.type_label }}</b-table-column>
             <b-table-column label="Адрес" v-slot="props">{{ props.row.address.value }}</b-table-column>
-            <b-table-column label="Создано" v-slot="props">{{ props.row.created_at }}</b-table-column>
-            <b-table-column label="Посл. изменение" v-slot="props">{{ props.row.updated_at }}</b-table-column>
+            <b-table-column label="Создано" v-slot="props">{{ (new Date(props.row.created_at)).toLocaleString() }}</b-table-column>
+            <b-table-column label="Посл. изменение" v-slot="props">{{ (new Date(props.row.updated_at)).toLocaleString() }}</b-table-column>
             <b-table-column label="" v-slot="props">
                 <div class="buttons has-addons is-centered">
                     <a class="button is-primary is-small" :href="`/driving-schools/${drivingSchool.slug}/learning-places/${props.row.id}/edit`">

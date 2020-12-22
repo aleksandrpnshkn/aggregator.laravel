@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Conclusion extends Model
 {
+    protected $casts = [
+        'created_at' => 'datetime:c',
+        'updated_at' => 'datetime:c',
+    ];
+
     public function driving_categories() : BelongsToMany
     {
         return $this->belongsToMany(DrivingCategory::class, 'conclusion_driving_category');

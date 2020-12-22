@@ -13,6 +13,11 @@ class DrivingCategory extends Model
         'description',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:c',
+        'updated_at' => 'datetime:c',
+    ];
+
     public function driving_schools() : BelongsToMany
     {
         return $this->belongsToMany(DrivingSchool::class, 'driving_school_driving_category');
