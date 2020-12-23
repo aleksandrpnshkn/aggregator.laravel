@@ -6,7 +6,7 @@ function showErrors(error) {
     Object.entries(error.response.data.errors)
         .forEach(([field, messages]) => {
             if (/[A-z_0-9]/.test(field)) {
-                this[field + 'Message'] = messages.join('<br>');
+                this[field + 'Message'] = messages.join(' ');
             }
         });
 }
