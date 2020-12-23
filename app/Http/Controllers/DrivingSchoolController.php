@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Address;
+use App\Contact;
 use App\DrivingCategory;
 use App\DrivingSchool;
 use App\Helpers\Helper;
@@ -73,11 +74,12 @@ class DrivingSchoolController extends Controller
     public function show(string $slug)
     {
         $drivingSchool = DrivingSchool::where('slug', $slug)
-            ->with(['learning_places', 'address', 'driving_categories', 'programs'])
+            ->with(['learning_places', 'address', 'driving_categories', 'programs', 'contacts'])
             ->firstOrFail();
 
         return view('driving-schools.show', [
             'drivingSchool' => $drivingSchool,
+            'contactTypes' => json_encode(Contact::getTypes(), JSON_UNESCAPED_UNICODE),
         ]);
     }
 

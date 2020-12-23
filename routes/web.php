@@ -47,3 +47,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/driving-schools/{slug}/programs/{program}', 'ProgramController@destroy')->name('deleteProgram');
 });
 Route::get('/driving-schools/{slug}/programs/{program}', 'ProgramController@show')->name('showProgram');
+
+Route::middleware('auth')->group(function () {
+    Route::post('/driving-schools/{slug}/contacts', 'ContactController@storeOrUpdate')->name('updateContact');
+    Route::delete('/driving-schools/{slug}/contacts/{contact}', 'ContactController@destroy')->name('deleteContact');
+});

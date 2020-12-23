@@ -9,6 +9,7 @@ import LearningPlacesTable from './components/LearningPlacesTable';
 import EditLearningPlace from './components/EditLearningPlace';
 import ProgramsTable from './components/ProgramsTable';
 import EditProgram from './components/EditProgram';
+import ContactsList from './components/ContactsList';
 
 Vue.use(Buefy, {
     defaultIconPack: 'fas',
@@ -24,5 +25,6 @@ new Vue({
         EditLearningPlace,
         ProgramsTable,
         EditProgram,
+        ContactsList,
     }
 });

@@ -53,7 +53,7 @@
 
         <div class="driving-school__sideinfo">
             <section class="mb-6">
-                <h3 class="subtitle is-5 is-inline-block">Водительские категории</h3>
+                <h3 class="subtitle is-5 mb-3 is-inline-block">Водительские категории</h3>
 
                 @if($drivingSchool->driving_categories->count())
                     <table class="table is-bordered is-narrow is-fullwidth">
@@ -71,7 +71,7 @@
 
             <section class="mb-6">
                 <div class="driving-school__subheader">
-                    <h3 class="subtitle is-5 is-inline-block">Учебные места</h3>
+                    <h3 class="subtitle is-5 mb-3 is-inline-block">Учебные места</h3>
 
                     @can('edit driving school', $drivingSchool)
                         <a href="{{ route('learningPlaces', [$drivingSchool->slug]) }}"
@@ -99,7 +99,7 @@
 
             <section class="mb-6">
                 <div class="driving-school__subheader">
-                    <h3 class="subtitle is-5 is-inline-block">Программы</h3>
+                    <h3 class="subtitle is-5 mb-3 is-inline-block">Программы</h3>
 
                     @can('edit driving school', $drivingSchool)
                         <a href="{{ route('programs', $drivingSchool->slug) }}"
@@ -120,6 +120,22 @@
                             </tr>
                         @endforeach
                     </table>
+                @else
+                    <p class="is-small">Информация не заполнена</p>
+                @endif
+            </section>
+
+            <section class="mb-6">
+                <div class="driving-school__subheader">
+                    <h3 class="subtitle is-5 mb-3 is-inline-block">Контакты</h3>
+                </div>
+
+                @if($drivingSchool->contacts->count())
+                    <contacts-list :can-edit="@can('edit driving school', $drivingSchool) true @else false @endif"
+                                   driving-school-slug="{{ $drivingSchool->slug }}"
+                                   :initial-contacts="{{ json_encode($drivingSchool->contacts, JSON_UNESCAPED_UNICODE) }}"
+                                   :contact-types="{{ $contactTypes }}"
+                    ></contacts-list>
                 @else
                     <p class="is-small">Информация не заполнена</p>
                 @endif
