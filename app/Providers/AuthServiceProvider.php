@@ -34,7 +34,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('edit driving school', function (User $user, DrivingSchool $drivingSchool) {
             return $user->hasPermissionTo('edit driving schools')
-                || $drivingSchool->author_id === $user->id;
+                || (int)$drivingSchool->author_id === (int)$user->id;
         });
     }
 }
